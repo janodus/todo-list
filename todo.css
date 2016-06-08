@@ -1,0 +1,13 @@
+/* This is a custom CSS stylesheet */
+
+ul
+{
+    list-style-type: none;
+    color: red;
+}
+
+.spaced {
+  margin-top: 5%;
+  margin-bottom: 5%;
+
+}

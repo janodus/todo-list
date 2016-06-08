@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+
+<html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TODOlist | Get Things Done</title>
+  <link href="Bootstrap/bootstrap-3.3.6-dist/css/bootstrap.css" rel="stylesheet">
+  <link href="todo.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+      <h1>TODO.List</h1>
+      <p><h2>Get Things Done</h2>
+      </div>
+    </div>
+  </div>
+
+<div class="container spaced">
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+      <center>
+        <h2>What Will You Accomplish?</h2>
+        <input id="task" placeholder="Type something here"><button id="add">Add</button>
+        <hr>
+          <div id="todos"></div></center>
+        </div>
+      </div>
+    </div>
+
+<script src="/Users/jan/Desktop/Projects/InspireSF/TodoList/todo.js"></script>
+<SCRIPT LANGUAGE = "JavaScript">
+
+
+/* get_todos is used by 3 functions. This function creates a new todos array when called, then collects the local storage string to be parsed into a readable object, before being returned. It is returned so the corresponding function that calls it, can continue its algorithm. */
+function get_todos() {
+    var todos = new Array;
+    var todos_str = localStorage.getItem('todo');
+    if (todos_str !== null) {
+        todos = JSON.parse(todos_str);
+    }
+    return todos;
+}
+
+/* Grabs the value in the task input form after the "add" button is clicked. Var todos calls the local stored todos via the get_todos function before the new value (task) is pushed to the array. The new array (with the new todo) is then stringified, and placed into locaStorage to be used by get_todos or show functions later on. */
+function add() {
+    var task = document.getElementById('task').value;
+
+    var todos = get_todos();
+    todos.push(task);
+    localStorage.setItem('todo', JSON.stringify(todos));
+
+    show();
+
+    return false;
+}
+
+/* For the buttons created by the show function, this function calls the todos list, removes the item by id (re:splice), and resets the local storage array to the post-splice array (affectively removing the array item associated with the corresponding id#). false is returned to stop the algorithm.*/
+function remove() {
+    var id = this.getAttribute('id');
+    var todos = get_todos();
+    todos.splice(id, 1);
+    localStorage.setItem('todo', JSON.stringify(todos));
+
+    show();
+
+    return false;
+}
+
+/*Function for running a loop that creates HTML within the DOM div above. Runs different loops for generating the Todo list, and the remove buttons. */
+function show() {
+    var todos = get_todos();
+
+    var html = '<ul>';
+    for(var i=0; i<todos.length; i++) {
+        html += '<li>' + todos[i] + " " + '<button class="remove" id="' + i  + '">X</button></li>';
+    };
+    html += '</ul>';
+
+    document.getElementById('todos').innerHTML = html;
+
+    var buttons = document.getElementsByClassName('remove');
+    for (var i=0; i < buttons.length; i++) {
+        buttons[i].addEventListener('click', remove);
+    };
+}
+
+
+/* This is where all the fun begins...*/
+document.getElementById('add').addEventListener('click', add);
+show();
+
+</SCRIPT>
+</body>
+</html>
